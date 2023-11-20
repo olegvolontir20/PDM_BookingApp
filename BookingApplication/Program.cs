@@ -1,4 +1,5 @@
 using BookingApplication.DAL;
+using BookingApplication.Services;
 using FluentAssertions.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<IAppartmentResppository, AppartmentsReppository>();
+builder.Services.AddTransient<IAppartmentService, AppartmentsService>();
 
 builder.Services.AddCors();
 
