@@ -25,6 +25,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAppartmentResppository, AppartmentsReppository>();
 builder.Services.AddTransient<IAppartmentService, AppartmentsService>();
+builder.Services.AddTransient<IHotelsRepository, HotelsRepository>();
+builder.Services.AddTransient<IHotelsService, HotelsService>();
 
 builder.Services.AddCors();
 
