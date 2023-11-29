@@ -28,78 +28,87 @@ namespace BookingApplication.Controllers
             var validPageFilter = new PaginationFilter(filter.per_page, filter.current_page);
             var apartamentData = await _appartmentsService.GetApartaments();
 
-            return Ok(new PaginatedResponse<List<Apartament>>(apartamentData.count, validPageFilter.per_page, validPageFilter.current_page, apartamentData.items));
+            return Ok(new PaginatedResponse<List<Apartament>>(apartamentData.count, validPageFilter.per_page, validPageFilter.current_page, apartamentData.Apartaments));
         }
 
-        //// GET: api/Apartaments/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Apartament>> GetApartament(int id)
-        //{
-        //    if (_context.Apartaments == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var apartament = await _context.Apartaments.Include(x => x.Reviews).ThenInclude(x => x.User).FirstOrDefaultAsync(i => i.Id == id);
+        // get: api/apartaments/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Apartament>> GetApartament(int id)
+        {
+            var apartament = await _appartmentsService.GetApartament(id);
+            if (apartament == null)
+            {
+                return NotFound();
+            }
+            return Ok(apartament);
+        }
 
-        //    if (apartament == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Apartament>>> SearchFilterAndSortApartaments([FromQuery] BookModel bookmodel)
+        {
+           
 
-        //    return apartament;
-        //}
+            var apartamentData = await _appartmentsService.SearchFilterAndSortApartaments(bookmodel);
+            
 
-        //[HttpGet("search")]
-        //public async Task<ActionResult<IEnumerable<Apartament>>> SearchFilterAndSortApartaments([FromQuery] BookModel bookModel)
-        //{
-        //    List<Apartament> apartaments = new();
-        //    try
-        //    {
-        //        apartaments = await _context.Apartaments
-        //                    .Include(a => a.ApartamentBookings)
-        //                    .Where(a => a.Country == bookModel.Country && a.City == bookModel.City)
-        //                    .Where(a => a.Capacity >= int.Parse(bookModel.Capacity))
-        //                    .ToListAsync();
-        //        List<Apartament> availableApartaments = new();
-        //        foreach (var apartament in apartaments)
-        //        {              
-        //            var apartamentBookings = await _context.ApartamentBookings.ToListAsync();
-        //            bool isBooked = false;
+            if (apartamentData == null)
+            {
+                return NotFound();
+            }else return Ok(apartamentData);
 
-        //            foreach (var apartamentBooking in apartamentBookings)
-        //            {
-        //                if (apartamentBooking.Ap_Id == apartament.Id)
-        //                {
-        //                    if (bookModel.StartDate <= apartamentBooking.LastDay.Date && bookModel.EndDate >= apartamentBooking.FirstDay.Date)
-        //                    {
-        //                        isBooked = true;
-        //                        break;
-        //                    }
-        //                }
-        //            }
+        }
 
-        //            if (!isBooked)
-        //            {
-        //                availableApartaments.Add(apartament);
-        //            }         
-        //        }
-        //        apartaments = availableApartaments;
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        throw ex;
-        //    }
+        /*        [HttpGet("search")]
+                public async Task<ActionResult<IEnumerable<Apartament>>> searchfilterandsortapartaments([FromQuery] BookModel bookmodel)
+                {
+                    List<Apartament> apartaments = new();
+                    try
+                    {
+                        apartaments = await _context.apartaments
+                                    .include(a => a.apartamentbookings)
+                                    .where(a => a.country == bookmodel.country && a.city == bookmodel.city)
+                                    .where(a => a.capacity >= int.parse(bookmodel.capacity))
+                                    .tolistasync();
+                        List<Apartament> availableapartaments = new();
+                        foreach (var apartament in apartaments)
+                        {
+                            var apartamentbookings = await _context.apartamentbookings.tolistasync();
+                            bool isbooked = false;
 
-        //    //if(apartaments.Count() > 0)
-        //    //{
-        //    //    apartaments = apartaments.ToList();
-        //    //}
+                            foreach (var apartamentbooking in apartamentbookings)
+                            {
+                                if (apartamentbooking.ap_id == apartament.id)
+                                {
+                                    if (bookmodel.startdate <= apartamentbooking.lastday.date && bookmodel.enddate >= apartamentbooking.firstday.date)
+                                    {
+                                        isbooked = true;
+                                        break;
+                                    }
+                                }
+                            }
 
-        //    apartaments = apartaments.OrderBy(a => a.Name).ToList();
+                            if (!isbooked)
+                            {
+                                availableapartaments.add(apartament);
+                            }
+                        }
+                        apartaments = availableapartaments;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
 
-        //    return Ok(apartaments);
+                    if (apartaments.Count() > 0)
+                    {
+                        apartaments = apartaments.ToList();
+                    }
 
-        //}
+                    apartaments = apartaments.OrderBy(a => a.Name).ToList();
+
+                    return Ok(apartaments);
+
+                }*/
 
         //[HttpGet("last-three")]
         //public async Task<ActionResult<Apartament>> GetLastThreeLocations()

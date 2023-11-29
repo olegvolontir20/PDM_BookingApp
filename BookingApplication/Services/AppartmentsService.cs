@@ -24,11 +24,75 @@ namespace BookingApplication.Services
 
             var res = new AppartmentList();
 
-            res.items = apartamentData;
+            res.Apartaments = apartamentData;
 
             res.count = apartamentData.Count;
 
             return res;
         }
-    }
+
+        public async Task<Apartament> GetApartament(int id)
+        {
+            var apartamentData = await _reppository.GetApartamentById(id);
+
+            var res = new Apartament();
+
+            res = apartamentData;
+
+            return res;
+        }
+
+
+        public async Task<AppartmentList> SearchFilterAndSortApartaments(BookModel bookModel)
+        {
+            List<Apartament> apartaments = new();
+            try
+            {
+                var apartamentData = await _reppository.GetApartaments();
+                var availableApartaments = new List<Apartament>();
+
+                foreach (var apartament in apartaments)
+                {
+                    var apartamentbookings = await _reppository.GetApartamentBookings();
+                    bool isbooked = false;
+
+                    foreach (var apartamentbooking in apartamentbookings)
+                    {
+                        if (apartamentbooking.Id == apartament.Id)
+                        {
+                            if (bookModel.StartDate <= apartamentbooking.LastDay.Date && bookModel.EndDate >= apartamentbooking.FirstDay.Date)
+                            {
+                                isbooked = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!isbooked)
+                    {
+                        availableApartaments.Add(apartament);
+                    }
+
+                  
+                }
+
+                availableApartaments = availableApartaments.OrderBy(a => a.Name).ToList();
+
+                // Assuming AppartmentList has a property named Apartaments
+                var result = new AppartmentList { Apartaments = availableApartaments };
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception appropriately (log, rethrow, etc.)
+                throw ex;
+            }
+        }
+           
+
+
+
+}
 }
