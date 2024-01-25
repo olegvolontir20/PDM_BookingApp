@@ -15,11 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AzureDatabaseConnection"));
 });
 
 builder.Services.AddTransient<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddTransient<IApartmentService, ApartmentService>();
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddCors();
 
@@ -31,11 +33,8 @@ app.UseCors(builder => builder
    .AllowAnyHeader());
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

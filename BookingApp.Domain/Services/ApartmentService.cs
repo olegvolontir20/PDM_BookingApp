@@ -1,4 +1,5 @@
-﻿using BookingApp.Domain.Interfaces;
+﻿using AutoMapper;
+using BookingApp.Domain.Interfaces;
 using BookingApp.Domain.Models.ApiRequests;
 using BookingApp.Domain.Models.Entities;
 using BookingApp.Domain.Models.ServiceResult;
@@ -13,37 +14,35 @@ namespace BookingApp.Domain.Services
     public class ApartmentService : IApartmentService
     {
         private readonly IApartmentRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ApartmentService(IApartmentRepository repository)
+        public ApartmentService(IApartmentRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<Apartment> GetApartment(int id)
         {
             var apartmentData = await _repository.GetApartmentById(id);
 
-            var res = new Apartment();
-
-            res = apartmentData;
-
-            return res;
+            return apartmentData;
         }
 
-        public async Task<ApartmentList> GetApartments()
+        public async Task<ApartmentResponseList> GetApartments()
         {
             var apartmentData = await _repository.GetApartments();
 
-            var res = new ApartmentList();
+            var res = new ApartmentResponseList();
 
-            res.Apartments = apartmentData;
+            res.Apartments = _mapper.Map<List<Apartment>?, List<ApartmentResponse>?>(apartmentData);
 
             res.Count = apartmentData.Count;
 
             return res;
         }
 
-        public async Task<ApartmentList> SearchFilterAndSortApartments(BookingModel bookModel)
+        public async Task<ApartmentResponseList> SearchFilterAndSortApartments(BookingModel bookModel)
         {
             List<Apartment> apartments = new();
             try
@@ -77,13 +76,50 @@ namespace BookingApp.Domain.Services
                 availableApartments = availableApartments.OrderBy(a => a.Name).ToList();
 
                 // Assuming ApartmentList has a property named Apartments
-                var result = new ApartmentList { Apartments = availableApartments };
+                var result = new ApartmentResponseList { Apartments = _mapper.Map<List<ApartmentResponse>>(availableApartments)};
 
                 return result;
             }
             catch (Exception ex)
             {
                 // Handle the exception appropriately (log, rethrow, etc.)
+                throw ex;
+            }
+        }
+
+        public async Task<List<Apartment>> GetLastThreeLocations()
+        {
+            var lastThreeApartaments = await _repository.GetLastThreeLocations();
+
+            return lastThreeApartaments;
+        }
+
+        public async Task PutApartment(int id, Apartment apartament)
+        {
+            await _repository.PutApartment(id, apartament);
+        }
+
+        public async Task<Apartment> PostApartment(ApartmentAddModel apartment)
+        {
+
+            var res = await _repository.PostApartment(_mapper.Map<ApartmentAddModel,Apartment>(apartment));
+
+            if(res == null) 
+            {
+                throw new Exception("Post Failed");
+            }
+
+            return res;
+        }
+
+        public async Task DeleteApartment(int id)
+        {
+            try
+            {
+                await _repository.DeleteApartment(id);
+            }
+            catch(Exception ex)
+            {
                 throw ex;
             }
         }

@@ -17,5 +17,13 @@ namespace BookingApp.Domain.Interfaces
         //Task<List<Apartment>> SearchFilterAndSortApartments(BookingModel bookModel);
 
         Task<List<ApartmentBooking>> GetApartmentBookings();
+
+        Task<List<Apartment>> GetLastThreeLocations();
+
+        Task PutApartment(int id, Apartment apartment);
+
+        Task<Apartment> PostApartment(Apartment apartment);
+
+        Task DeleteApartment(int id);
     }
 }

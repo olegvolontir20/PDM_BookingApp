@@ -1,4 +1,5 @@
 ﻿using BookingApp.Domain.Interfaces;
+using BookingApp.Domain.Models.ApiRequests;
 using BookingApp.Domain.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -49,6 +50,43 @@ namespace BookingApp.DAL.Repositories
         public async Task<List<ApartmentBooking>> GetApartmentBookings()
         {
             return await _context.ApartmentBookings.ToListAsync();
+        }
+
+        public async Task<List<Apartment>> GetLastThreeLocations()
+        {
+                var lastThreeApartments = await _context.Apartments
+                    .OrderByDescending(a => a.Id)
+                    .Take(3)
+                    .ToListAsync();
+
+                return lastThreeApartments;
+        }
+
+        public async Task PutApartment(int id, Apartment apartment)
+        {
+            _context.Entry(apartment).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Apartment> PostApartment(Apartment apartment)
+        {
+            var res = _context.Apartments.Add(apartment);
+            await _context.SaveChangesAsync();
+
+            return res.Entity;
+        }
+
+        public async Task DeleteApartment(int id)
+        {
+            var apartment = await _context.Apartments.FindAsync(id);
+            if (apartment == null)
+            {
+                throw new Exception($"Apartment with id {id} not found");
+            }
+
+            _context.Apartments.Remove(apartment);
+            await _context.SaveChangesAsync();
         }
     }
 }

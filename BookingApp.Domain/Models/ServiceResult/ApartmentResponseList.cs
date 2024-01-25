@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BookingApp.Domain.Models.ServiceResult
 {
-    public class ApartmentList
+    public class ApartmentResponseList
     {
         public int Count { get; set; }
 
-        public List<Apartment>? Apartments { get; set; }
+        public List<ApartmentResponse>? Apartments { get; set; }
     }
 }
