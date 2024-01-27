@@ -20,7 +20,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.AddTransient<IApartmentRepository, ApartmentRepository>();
+builder.Services.AddTransient<IHotelRepository, HotelRepository>();
 builder.Services.AddTransient<IApartmentService, ApartmentService>();
+builder.Services.AddTransient<IHotelService, HotelService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddCors();

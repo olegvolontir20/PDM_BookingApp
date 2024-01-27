@@ -22,35 +22,28 @@ namespace BookingApp.Domain.Services
             _mapper = mapper;
         }
 
-        public async Task<Apartment> GetApartment(int id)
+        public async Task<ApartmentResponse> GetApartment(int id)
         {
             var apartmentData = await _repository.GetApartmentById(id);
 
-            return apartmentData;
+            return _mapper.Map<Apartment,ApartmentResponse>(apartmentData);
         }
 
-        public async Task<ApartmentResponseList> GetApartments()
+        public async Task<IEnumerable<ApartmentResponse>> GetApartments()
         {
             var apartmentData = await _repository.GetApartments();
 
-            var res = new ApartmentResponseList();
-
-            res.Apartments = _mapper.Map<List<Apartment>?, List<ApartmentResponse>?>(apartmentData);
-
-            res.Count = apartmentData.Count;
-
-            return res;
+            return _mapper.Map< IEnumerable<Apartment>, IEnumerable<ApartmentResponse>>(apartmentData);
         }
 
-        public async Task<ApartmentResponseList> SearchFilterAndSortApartments(BookingModel bookModel)
+        public async Task<IEnumerable<ApartmentResponse>> SearchFilterAndSortApartments(BookingModel bookModel)
         {
-            List<Apartment> apartments = new();
             try
             {
-                var apartmentData = await _repository.GetApartments();
+                var apartmentData = await _repository.SearchFilterAndSortApartments(bookModel);
                 var availableApartments = new List<Apartment>();
 
-                foreach (var apartment in apartments)
+                foreach (var apartment in apartmentData)
                 {
                     var apartmentBookings = await _repository.GetApartmentBookings();
                     bool isBooked = false;
@@ -76,7 +69,7 @@ namespace BookingApp.Domain.Services
                 availableApartments = availableApartments.OrderBy(a => a.Name).ToList();
 
                 // Assuming ApartmentList has a property named Apartments
-                var result = new ApartmentResponseList { Apartments = _mapper.Map<List<ApartmentResponse>>(availableApartments)};
+                var result = _mapper.Map<List<Apartment>, IEnumerable<ApartmentResponse>>(availableApartments);
 
                 return result;
             }
@@ -87,16 +80,16 @@ namespace BookingApp.Domain.Services
             }
         }
 
-        public async Task<List<Apartment>> GetLastThreeLocations()
+        public async Task<IEnumerable<ApartmentResponse>> GetLastThreeLocations()
         {
             var lastThreeApartaments = await _repository.GetLastThreeLocations();
 
-            return lastThreeApartaments;
+            return _mapper.Map<IEnumerable<Apartment>, IEnumerable<ApartmentResponse>>(lastThreeApartaments);
         }
 
         public async Task PutApartment(int id, Apartment apartament)
         {
-            await _repository.PutApartment(id, apartament);
+            await _repository.PutApartment(apartament);
         }
 
         public async Task<Apartment> PostApartment(ApartmentAddModel apartment)

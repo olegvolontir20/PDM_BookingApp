@@ -12,6 +12,8 @@ namespace BookingApp.Api.MapProfiles
         {
             CreateMap<Apartment, ApartmentResponse>();
             CreateMap<ApartmentAddModel, Apartment>();
+            CreateMap<HotelAddModel, Hotel>();
+            CreateMap<Hotel, HotelResponse>();
         }
     }
 }

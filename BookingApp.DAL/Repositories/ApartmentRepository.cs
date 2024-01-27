@@ -28,7 +28,7 @@ namespace BookingApp.DAL.Repositories
             return apartmentData;
         }
 
-        public async Task<List<Apartment>> GetApartments()
+        public async Task<IEnumerable<Apartment>> GetApartments()
         {
             var apartmentData = await _context.Apartments
                 .Include(x => x.Reviews)
@@ -36,23 +36,22 @@ namespace BookingApp.DAL.Repositories
             return apartmentData;
         }
 
-        //public async Task<List<Apartment>> SearchFilterAndSortApartments(BookModel bookModel)
-        //{
+        public async Task<IEnumerable<Apartment>> SearchFilterAndSortApartments(BookingModel bookModel)
+        {
+            var apartmentData = await _context.Apartments
+                        .Include(a => a.ApartmentBookings)
+                        .Where(a => a.Country == bookModel.Country && a.City == bookModel.City)
+                        .Where(a => a.Capacity >= int.Parse(bookModel.Capacity))
+                        .ToListAsync();
+            return apartmentData;
+        }
 
-        //    var apartmentData = await _context.Apartments
-        //                .Include(a => a.ApartmentBookings)
-        //                .Where(a => a.Country == bookModel.Country && a.City == bookModel.City)
-        //                .Where(a => a.Capacity >= int.Parse(bookModel.Capacity))
-        //                .ToListAsync();
-        //    return apartmentData;
-        //}
-
-        public async Task<List<ApartmentBooking>> GetApartmentBookings()
+        public async Task<IEnumerable<ApartmentBooking>> GetApartmentBookings()
         {
             return await _context.ApartmentBookings.ToListAsync();
         }
 
-        public async Task<List<Apartment>> GetLastThreeLocations()
+        public async Task<IEnumerable<Apartment>> GetLastThreeLocations()
         {
                 var lastThreeApartments = await _context.Apartments
                     .OrderByDescending(a => a.Id)
@@ -62,7 +61,7 @@ namespace BookingApp.DAL.Repositories
                 return lastThreeApartments;
         }
 
-        public async Task PutApartment(int id, Apartment apartment)
+        public async Task PutApartment(Apartment apartment)
         {
             _context.Entry(apartment).State = EntityState.Modified;
 

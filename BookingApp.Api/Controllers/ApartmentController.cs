@@ -26,17 +26,17 @@ namespace BookingApp.Api.Controllers
 
         // GET: api/Apartment
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Apartment>>> GetApartments([FromQuery] PaginationFilter filter)
+        public async Task<ActionResult<IEnumerable<ApartmentResponse>>> GetApartments([FromQuery] PaginationFilter filter)
         {
             var validPageFilter = new PaginationFilter(filter.PerPage, filter.CurrentPage);
             var apartamentData = await _apartmentService.GetApartments();
 
-            return Ok(new PaginatedResponse<ApartmentResponseList>(apartamentData.Count, validPageFilter.PerPage, validPageFilter.CurrentPage, apartamentData));
+            return Ok(new PaginatedResponse<IEnumerable<ApartmentResponse>>(apartamentData.Count(), validPageFilter.PerPage, validPageFilter.CurrentPage, apartamentData));
         }
 
         // get: api/apartment/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Apartment>> GetApartament(int id)
+        public async Task<ActionResult<ApartmentResponse>> GetApartament(int id)
         {
             var apartment = await _apartmentService.GetApartment(id);
             if (apartment == null)
@@ -47,9 +47,9 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Apartment>>> SearchFilterAndSortApartaments([FromQuery] BookingModel bookmodel)
+        public async Task<ActionResult<IEnumerable<ApartmentResponse>>> SearchFilterAndSortApartaments([FromQuery] BookingModel bookModel)
         {
-            var apartmentData = await _apartmentService.SearchFilterAndSortApartments(bookmodel);
+            var apartmentData = await _apartmentService.SearchFilterAndSortApartments(bookModel);
 
             if (apartmentData == null)
             {
@@ -59,7 +59,7 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet("last-three")]
-        public async Task<ActionResult<Apartment>> GetLastThreeLocations()
+        public async Task<ActionResult<IEnumerable<ApartmentResponse>>> GetLastThreeLocations()
         {
             try
             {
