@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingApp.Domain.Models.Entities
+namespace BookingApp.DAL.DTO
 {
-    public class Hotel
+    [Table("Hotel")]
+    public class HotelDTO
     {
         public int Id { get; set; }
         public string? Name { get; set; }
@@ -16,9 +17,11 @@ namespace BookingApp.Domain.Models.Entities
         public string? Country { get; set; }
         public string? Phone { get; set; }
         public string? Description { get; set; }
-        public List<Room>? Rooms { get; set; }
-        public List<RoomBooking>? RoomBookings { get; set; }
+        public List<RoomDTO>? Rooms { get; set; }
+        public List<RoomBookingDTO>? RoomBookings { get; set; }
         public string? PathImage { get; set; }
-        public List<HotelReview>? Reviews { get; set; }
+
+        public List<HotelReviewDTO>? Reviews { get; set; }
+
     }
 }

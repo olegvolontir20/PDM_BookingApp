@@ -6,18 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingApp.Domain.Models.Entities
+namespace BookingApp.DAL.DTO
 {
-    public class HotelReview
+    [Table("ApartmentReview")]
+    public class ApartmentReviewDTO
     {
         public int Id { get; set; }
 
         public int User_Id { get; set; }
-        public int Hotel_Id { get; set; }
+        public int Apartment_Id { get; set; }
         public string? Body { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime Updated_at { get; set; }
-        public User? User { get; set; }
-        public Hotel? Hotel { get; set; }
+
+        [ForeignKey("User_Id")]
+        public UserDTO? User { get; set; }
+        [ForeignKey("Apartment_Id")]
+        public ApartmentDTO? Apartment { get; set; }
     }
 }

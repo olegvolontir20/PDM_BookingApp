@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingApp.Domain", "BookingApp.Domain\BookingApp.Domain.csproj", "{709FC74B-A382-406B-969D-E40873566677}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingApp.Domain", "BookingApp.Domain\BookingApp.Domain.csproj", "{709FC74B-A382-406B-969D-E40873566677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingApp.DAL", "BookingApp.DAL\BookingApp.DAL.csproj", "{A9F10BDC-12B9-454E-8DBD-F39F85E8C3D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingApp.DAL", "BookingApp.DAL\BookingApp.DAL.csproj", "{A9F10BDC-12B9-454E-8DBD-F39F85E8C3D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingApp.Api", "BookingApp.Api\BookingApp.Api.csproj", "{58152AEB-466C-4624-8CA6-BCDDAC7EB80B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingApp.Api", "BookingApp.Api\BookingApp.Api.csproj", "{58152AEB-466C-4624-8CA6-BCDDAC7EB80B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

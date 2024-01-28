@@ -6,15 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingApp.Domain.Models.Entities
+namespace BookingApp.DAL.DTO
 {
-    public class Room
+    [Table("Room")]
+    public class RoomDTO
     {
         public int Id { get; set; }
+
         public int NumberOfRoom { get; set; }
         public int Capacity { get; set; }
         public int Price { get; set; }
         public int Hotel_Id { get; set; }
-        public Hotel? Hotel { get; set; }
+
+        [ForeignKey("Hotel_Id")]
+        public HotelDTO? Hotel { get; set; }
+
+
     }
 }

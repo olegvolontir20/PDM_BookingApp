@@ -11,16 +11,12 @@ namespace BookingApp.Domain.Models.Entities
     public class ApartmentReview
     {
         public int Id { get; set; }
-
         public int User_Id { get; set; }
         public int Apartment_Id { get; set; }
         public string? Body { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime Updated_at { get; set; }
-
-        [ForeignKey("User_Id")]
         public User? User { get; set; }
-        [ForeignKey("Apartment_Id")]
         public Apartment? Apartment { get; set; }
     }
 }

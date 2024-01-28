@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using BookingApp.DAL.DTO;
 using BookingApp.Domain.Interfaces;
 using BookingApp.Domain.Models.ApiRequests;
 using BookingApp.Domain.Models.ApiResponses;
@@ -14,10 +16,12 @@ namespace BookingApp.DAL.Repositories
     public class HotelRepository : IHotelRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public HotelRepository(DataContext context)
+        public HotelRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Hotel>> GetHotels() 
@@ -26,7 +30,7 @@ namespace BookingApp.DAL.Repositories
                 .Include(x => x.Reviews)
                 .ToListAsync();
 
-            return hotelData;
+            return _mapper.Map<IEnumerable<Hotel>>(hotelData);
         }
 
         public async Task<IEnumerable<Hotel>> SearchFilterAndSortHotels(BookingModel bookModel)
@@ -38,48 +42,51 @@ namespace BookingApp.DAL.Repositories
                             .Where(h => h.Rooms.Any(r => r.Capacity >= int.Parse(bookModel.Capacity)))
                             .ToListAsync();
 
-            return hotels;
+            return _mapper.Map<IEnumerable<Hotel>>(hotels);
         }
 
         public async Task<IEnumerable<RoomBooking>> GetRoomBookings()
         {
-            return await _context.RoomBookings.ToListAsync();
+            var bookings = await _context.RoomBookings.ToListAsync();
+
+            return _mapper.Map<IEnumerable<RoomBooking>>(bookings);
         }
 
         public async Task<IEnumerable<Hotel>> GetLastThreeLocations()
         {
-            var lastThreeHotels = _context.Hotels
+            var lastThreeHotels = await _context.Hotels
                 .OrderByDescending(h => h.Id)
                 .Take(3)
-                .ToList();
+                .ToListAsync();
 
-            return lastThreeHotels;
+            return _mapper.Map<IEnumerable<Hotel>>(lastThreeHotels);
         }
 
         public async Task<Hotel> GetHotel(int id)
         {
             var hotelData = await _context.Hotels
-                .Include(x=>x.Reviews)
+                .Include(x => x.Reviews)
                 .ThenInclude(x => x.User)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
-            return hotelData;
+            return _mapper.Map<Hotel>(hotelData);
         }
 
         public async Task PutHotel(Hotel hotel)
         {
-            _context.Entry(hotel).State = EntityState.Modified;
+            var changedHotel = _mapper.Map<HotelDTO>(hotel);
+            _context.Entry(changedHotel).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
         }
 
         public async Task<Hotel> PostHotel(Hotel hotel)
         {
-            var res = _context.Hotels.Add(hotel);
+            var res = _context.Hotels.Add(_mapper.Map<HotelDTO>(hotel));
             await _context.SaveChangesAsync();
 
-            return res.Entity;
+            return _mapper.Map<Hotel>(res.Entity);
         }
 
         public async Task DeleteHotel(int id)

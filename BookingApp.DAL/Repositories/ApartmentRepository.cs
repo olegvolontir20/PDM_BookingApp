@@ -1,4 +1,6 @@
-﻿using BookingApp.Domain.Interfaces;
+﻿using AutoMapper;
+using BookingApp.DAL.DTO;
+using BookingApp.Domain.Interfaces;
 using BookingApp.Domain.Models.ApiRequests;
 using BookingApp.Domain.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +15,12 @@ namespace BookingApp.DAL.Repositories
     public class ApartmentRepository : IApartmentRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public ApartmentRepository(DataContext context)
+        public ApartmentRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<Apartment> GetApartmentById(int id)
@@ -25,7 +29,7 @@ namespace BookingApp.DAL.Repositories
                 .Where(a => a.Id == id)
                 .FirstOrDefaultAsync();
 
-            return apartmentData;
+            return _mapper.Map<Apartment>(apartmentData);
         }
 
         public async Task<IEnumerable<Apartment>> GetApartments()
@@ -33,7 +37,7 @@ namespace BookingApp.DAL.Repositories
             var apartmentData = await _context.Apartments
                 .Include(x => x.Reviews)
                 .ToListAsync();
-            return apartmentData;
+            return _mapper.Map<IEnumerable<Apartment>>(apartmentData);
         }
 
         public async Task<IEnumerable<Apartment>> SearchFilterAndSortApartments(BookingModel bookModel)
@@ -43,12 +47,13 @@ namespace BookingApp.DAL.Repositories
                         .Where(a => a.Country == bookModel.Country && a.City == bookModel.City)
                         .Where(a => a.Capacity >= int.Parse(bookModel.Capacity))
                         .ToListAsync();
-            return apartmentData;
+            return _mapper.Map<IEnumerable<Apartment>>(apartmentData);
         }
 
         public async Task<IEnumerable<ApartmentBooking>> GetApartmentBookings()
         {
-            return await _context.ApartmentBookings.ToListAsync();
+            var apartmentData = await _context.ApartmentBookings.ToListAsync();
+            return _mapper.Map<IEnumerable<ApartmentBooking>>(apartmentData);
         }
 
         public async Task<IEnumerable<Apartment>> GetLastThreeLocations()
@@ -58,22 +63,23 @@ namespace BookingApp.DAL.Repositories
                     .Take(3)
                     .ToListAsync();
 
-                return lastThreeApartments;
+                return _mapper.Map<IEnumerable<Apartment>>(lastThreeApartments);
         }
 
         public async Task PutApartment(Apartment apartment)
         {
-            _context.Entry(apartment).State = EntityState.Modified;
+            var changedApartment = _mapper.Map<ApartmentDTO>(apartment);
+            _context.Entry(changedApartment).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
         }
 
         public async Task<Apartment> PostApartment(Apartment apartment)
         {
-            var res = _context.Apartments.Add(apartment);
+            var res = _context.Apartments.Add(_mapper.Map<ApartmentDTO>(apartment));
             await _context.SaveChangesAsync();
 
-            return res.Entity;
+            return _mapper.Map<Apartment>(res.Entity);
         }
 
         public async Task DeleteApartment(int id)
