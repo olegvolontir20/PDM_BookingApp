@@ -15,6 +15,12 @@ namespace BookingApp.DAL
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            SeedRoles(modelBuilder);
+        }
+
         public DbSet<ApartmentDTO> Apartments { get; set; }
         public DbSet<ApartmentBookingDTO> ApartmentBookings { get; set; }
         public DbSet<ApartmentReviewDTO> ApartmentReviews { get; set; }
@@ -25,6 +31,14 @@ namespace BookingApp.DAL
         //public DbSet<User> Users { get; set; }
         public DbSet<FavoriteApartmentDTO>? FavoriteApartment { get; set; }
         public DbSet<FavoriteHotelDTO>? FavoriteHotel { get; set; }
+
+        private void SeedRoles(ModelBuilder builder)
+        {
+            builder.Entity<IdentityRole<int>>().HasData(
+                new IdentityRole<int>() { Id = 1, Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin" },
+                new IdentityRole<int>() { Id = 2, Name = "Regular", ConcurrencyStamp = "2", NormalizedName = "Regular" }
+                );
+        }
 
     }
 }

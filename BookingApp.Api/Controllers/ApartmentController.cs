@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System.Collections.Generic;
 using Eaf.Domain.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingApp.Api.Controllers
 {
@@ -25,6 +26,7 @@ namespace BookingApp.Api.Controllers
         }
 
         // GET: api/Apartment
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ApartmentResponse>>> GetApartments([FromQuery] PaginationFilter filter)
         {

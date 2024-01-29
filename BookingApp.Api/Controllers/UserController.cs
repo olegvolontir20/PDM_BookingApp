@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using BookingApp.DAL.DTO;
 using BookingApp.Domain.Interfaces;
 using BookingApp.Domain.Models.ApiRequests;
 using BookingApp.Domain.Models.Entities;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BookingApp.Api.Controllers
 {
@@ -11,28 +15,61 @@ namespace BookingApp.Api.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly IUserService _userService;
+        //private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public UserController(IUserService userService, IMapper mapper)
+        private readonly UserManager<UserDTO> _userManager;
+        public UserController(/*IUserService userService, */IMapper mapper, UserManager<UserDTO> userManager)
         {
-            _userService = userService;
+            //_userService = userService;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<User>> Register(UserSignUpModel user)
+        public async Task<IActionResult> Register(UserSignUpModel userSignUpModel)
         {
-            //var res = 
+            var user = _mapper.Map<UserDTO>(userSignUpModel);
 
-            //return CreatedAtAction("GetUser", new { id = user.Id }, user);
-            throw new NotImplementedException();
+            var result = await _userManager.CreateAsync(user, userSignUpModel.Password);
+
+            if (!result.Succeeded)
+            {
+                try
+                {
+                    var err = result.Errors.First();
+                    return BadRequest(err.Description);
+                }
+                catch
+                {
+                    return BadRequest();
+                }                           
+            }
+
+            await _userManager.AddToRoleAsync(user, "Regular");
+
+            return Ok();
         }
 
         [Route("Login")]
         [HttpPost]
-        public async Task<ActionResult<User>> Login(UserSignInModel model)
+        public async Task<IActionResult> Login(UserSignInModel model)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByNameAsync(model.Name);
+
+            if (user != null &&
+                await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+                await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme,
+                    new ClaimsPrincipal(identity));
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new Exception("Wrong user name or password"));
+            }
         }
     }
 }
