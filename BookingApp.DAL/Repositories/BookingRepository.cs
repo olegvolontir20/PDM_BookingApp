@@ -24,6 +24,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<ApartmentBooking> GetApartmentBooking(int bookingId)
         {
             var res = await _context.ApartmentBookings
+                .Include(x => x.Apartment)
                 .Where(x => x.Id == bookingId)
                 .FirstOrDefaultAsync();
 
@@ -33,6 +34,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<RoomBooking> GetRoomBooking(int bookingId)
         {
             var res = await _context.RoomBookings
+                .Include(x => x.Room)
                 .Where(x => x.Id == bookingId)
                 .FirstOrDefaultAsync();
 
@@ -77,6 +79,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<ICollection<ApartmentBooking>> GetUserApartmentBookings(int userId)
         {
             var res = await _context.ApartmentBookings
+                .Include(x => x.Apartment)
                 .Where(x => x.User_Id == userId)
                 .ToListAsync();
 
@@ -86,6 +89,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<ICollection<RoomBooking>> GetUserRoomBookings(int userId)
         {
             var bookings = await _context.RoomBookings
+                .Include(x => x.Room)
                 .Where(x => x.User_Id == userId)
                 .ToListAsync();
 

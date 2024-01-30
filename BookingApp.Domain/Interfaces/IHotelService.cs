@@ -20,6 +20,8 @@ namespace BookingApp.Domain.Interfaces
 
         Task<HotelResponse> GetHotel(int id);
 
+        Task<RoomResponse> GetRoom(int roomId);
+
         Task PutHotel(int id, Hotel hotel);
 
         Task<Hotel> PostHotel(HotelAddModel hotel);

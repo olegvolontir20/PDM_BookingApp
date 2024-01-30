@@ -5,6 +5,7 @@ using BookingApp.Domain.Models.ApiResponses;
 using BookingApp.Domain.Models.Entities;
 using BookingApp.Domain.Models.ServiceResult;
 using BookingApp.Domain.Services;
+using Eaf.Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +42,25 @@ namespace BookingApp.Api.Controllers
             var validPageFilter = new PaginationFilter(filter.PerPage, filter.CurrentPage);
             var hotelData = await _hotelService.GetHotels();
 
+            if (hotelData == null)
+            {
+                return NotFound();
+            }
+
             return Ok(new PaginatedResponse<ICollection<HotelResponse>>(hotelData.Count(), validPageFilter.PerPage, validPageFilter.CurrentPage, hotelData));
+        }
+
+        [HttpGet("room")]
+        public async Task<ActionResult<RoomResponse>> GetRoom(int roomId)
+        {
+            var room = await _hotelService.GetRoom(roomId);
+
+            if(room == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(room);
         }
 
         [HttpGet("search")]

@@ -115,5 +115,12 @@ namespace BookingApp.Domain.Services
                 throw ex;
             }
         }
+
+        public async Task<RoomResponse> GetRoom(int roomId)
+        {
+            var room = await _repository.GetRoom(roomId);
+
+            return _mapper.Map<RoomResponse>(room);
+        }
     }
 }

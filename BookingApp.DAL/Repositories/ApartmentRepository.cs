@@ -26,6 +26,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<Apartment> GetApartmentById(int id)
         {
             var apartmentData = await _context.Apartments
+                .Include(x => x.Reviews)
                 .Where(a => a.Id == id)
                 .FirstOrDefaultAsync();
 

@@ -13,5 +13,6 @@ namespace BookingApp.Domain.Models.ServiceResult
         public int NumberOfRoom { get; set; }
         public int Capacity { get; set; }
         public int Price { get; set; }
+        public HotelResponse? Hotel { get; set; }
     }
 }

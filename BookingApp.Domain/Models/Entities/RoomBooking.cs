@@ -12,12 +12,7 @@ namespace BookingApp.Domain.Models.Entities
         public DateTime FirstDay { get; set; }
         public DateTime LastDay { get; set; }
         public int NumberOfPeople { get; set; }
-
-        [ForeignKey("User_Id")]
         public User? User { get; set; }
-        [ForeignKey("Room_Id")]
         public Room? Room { get; set; }
-
     }
-
 }

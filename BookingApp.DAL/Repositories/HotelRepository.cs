@@ -104,6 +104,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<Room> GetRoom(int roomId)
         {
             var roomData = await _context.Rooms
+                .Include(x => x.Hotel)
                 .Where(x => x.Id == roomId)
                 .FirstOrDefaultAsync();
 
