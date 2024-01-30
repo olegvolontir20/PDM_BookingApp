@@ -12,7 +12,7 @@ namespace BookingApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HotelController : Controller
+    public class HotelController : ControllerBase
     {
         private readonly IHotelService _hotelService;
         private readonly IMapper _mapper;
@@ -45,7 +45,7 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> SearchFilterAndSortHotels([FromQuery] BookingModel bookModel)
+        public async Task<ActionResult<IEnumerable<Hotel>>> SearchFilterAndSortHotels([FromQuery] SearchBookingModel bookModel)
         {
             var hotelData = await _hotelService.SearchFilterAndSortHotels(bookModel);
 

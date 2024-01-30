@@ -43,7 +43,7 @@ namespace BookingApp.Domain.Services
             return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelResponse>>(lastThreeHotels);
         }
 
-        public async Task<IEnumerable<HotelResponse>> SearchFilterAndSortHotels(BookingModel bookModel)
+        public async Task<IEnumerable<HotelResponse>> SearchFilterAndSortHotels(SearchBookingModel bookModel)
         {
             try
             {

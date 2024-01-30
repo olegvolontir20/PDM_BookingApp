@@ -53,11 +53,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddTransient<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddTransient<IHotelRepository, HotelRepository>();
+builder.Services.AddTransient<IBookingRepository, BookingRepository>();
+
 builder.Services.AddTransient<IApartmentService, ApartmentService>();
 builder.Services.AddTransient<IHotelService, HotelService>();
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddTransient<IBookingService, BookingService>();
 
 builder.Services.AddCors();
 

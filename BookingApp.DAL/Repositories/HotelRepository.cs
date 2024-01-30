@@ -33,7 +33,7 @@ namespace BookingApp.DAL.Repositories
             return _mapper.Map<IEnumerable<Hotel>>(hotelData);
         }
 
-        public async Task<IEnumerable<Hotel>> SearchFilterAndSortHotels(BookingModel bookModel)
+        public async Task<IEnumerable<Hotel>> SearchFilterAndSortHotels(SearchBookingModel bookModel)
         {
             var hotels = await _context.Hotels
                             .Include(h => h.Rooms)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookingApp.Domain.Models.ApiRequests
 {
-    public class BookingModel
+    public class SearchBookingModel
     {
         public string? Country { get; set; }
         public string? City { get; set; }

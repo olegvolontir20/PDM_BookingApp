@@ -13,7 +13,7 @@ namespace BookingApp.Domain.Interfaces
     {
         Task<IEnumerable<Hotel>> GetHotels();
 
-        Task<IEnumerable<Hotel>> SearchFilterAndSortHotels(BookingModel bookModel);
+        Task<IEnumerable<Hotel>> SearchFilterAndSortHotels(SearchBookingModel bookModel);
 
         Task<IEnumerable<Hotel>> GetLastThreeLocations();
 

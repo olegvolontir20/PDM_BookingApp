@@ -26,7 +26,7 @@ namespace BookingApp.Api.Controllers
         }
 
         // GET: api/Apartment
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ApartmentResponse>>> GetApartments([FromQuery] PaginationFilter filter)
         {
@@ -49,7 +49,7 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<ApartmentResponse>>> SearchFilterAndSortApartaments([FromQuery] BookingModel bookModel)
+        public async Task<ActionResult<IEnumerable<ApartmentResponse>>> SearchFilterAndSortApartaments([FromQuery] SearchBookingModel bookModel)
         {
             var apartmentData = await _apartmentService.SearchFilterAndSortApartments(bookModel);
 

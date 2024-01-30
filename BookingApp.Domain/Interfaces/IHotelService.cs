@@ -14,7 +14,7 @@ namespace BookingApp.Domain.Interfaces
     {
         Task<IEnumerable<HotelResponse>> GetHotels();
 
-        Task<IEnumerable<HotelResponse>> SearchFilterAndSortHotels(BookingModel bookModel);
+        Task<IEnumerable<HotelResponse>> SearchFilterAndSortHotels(SearchBookingModel bookModel);
 
         Task<IEnumerable<HotelResponse>> GetLastThreeLocations();
 

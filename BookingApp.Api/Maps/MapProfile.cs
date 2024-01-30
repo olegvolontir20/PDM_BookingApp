@@ -11,6 +11,7 @@ namespace BookingApp.Api.MapProfiles
     {
         public MapProfile() 
         {
+            //Request models and etc
             CreateMap<Apartment, ApartmentResponse>();
             CreateMap<ApartmentAddModel, Apartment>();
 
@@ -19,20 +20,37 @@ namespace BookingApp.Api.MapProfiles
 
             CreateMap<UserSignUpModel, UserDTO>();
 
+            CreateMap<AddApartmentBookingModel, ApartmentBooking>();
+
+            CreateMap<AddRoomBookingModel, RoomBooking>();
+
+            //Database DTO
             CreateMap<ApartmentDTO, Apartment>();
             CreateMap<Apartment, ApartmentDTO>();
 
             CreateMap<ApartmentBookingDTO, ApartmentBooking>();
+            CreateMap<ApartmentBooking, ApartmentBookingDTO>();
+
             CreateMap<ApartmentReviewDTO, ApartmentReview>();
+            CreateMap<ApartmentReview, ApartmentReviewDTO>();
+
             CreateMap<FavoriteApartmentDTO, FavoriteApartment>();
+            CreateMap<FavoriteApartment, FavoriteApartmentDTO>();
+
             CreateMap<FavoriteHotelDTO, FavoriteHotel>();
+            CreateMap<FavoriteHotel, FavoriteHotelDTO>();
 
             CreateMap<HotelDTO, Hotel>();
             CreateMap<Hotel, HotelDTO>();
 
             CreateMap<HotelReviewDTO, HotelReview>();
+            CreateMap<HotelReview, HotelReviewDTO>();
+
             CreateMap<RoomBookingDTO, RoomBooking>();
+            CreateMap<RoomBooking, RoomBookingDTO>();
+
             CreateMap<RoomDTO, Room>();
+            CreateMap<Room, RoomDTO>();
 
             CreateMap<UserDTO, User>();
             CreateMap<User, UserDTO>();

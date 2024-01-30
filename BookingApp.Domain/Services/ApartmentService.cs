@@ -36,7 +36,7 @@ namespace BookingApp.Domain.Services
             return _mapper.Map< IEnumerable<Apartment>, IEnumerable<ApartmentResponse>>(apartmentData);
         }
 
-        public async Task<IEnumerable<ApartmentResponse>> SearchFilterAndSortApartments(BookingModel bookModel)
+        public async Task<IEnumerable<ApartmentResponse>> SearchFilterAndSortApartments(SearchBookingModel bookModel)
         {
             try
             {

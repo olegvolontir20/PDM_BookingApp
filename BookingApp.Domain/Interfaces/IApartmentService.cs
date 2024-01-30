@@ -15,7 +15,7 @@ namespace BookingApp.Domain.Interfaces
 
         Task<ApartmentResponse> GetApartment(int id);
 
-        Task<IEnumerable<ApartmentResponse>> SearchFilterAndSortApartments(BookingModel bookModel);
+        Task<IEnumerable<ApartmentResponse>> SearchFilterAndSortApartments(SearchBookingModel bookModel);
 
         Task<IEnumerable<ApartmentResponse>> GetLastThreeLocations();
 

@@ -13,7 +13,7 @@ namespace BookingApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         //private readonly IUserService _userService;
         private readonly IMapper _mapper;
@@ -54,7 +54,7 @@ namespace BookingApp.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserSignInModel model)
         {
-            var user = await _userManager.FindByNameAsync(model.Name);
+            var user = await _userManager.FindByNameAsync(model.UserName);
 
             if (user != null &&
                 await _userManager.CheckPasswordAsync(user, model.Password))
