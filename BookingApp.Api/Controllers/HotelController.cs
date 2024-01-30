@@ -25,7 +25,7 @@ namespace BookingApp.Api.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hotel>> GetHotel([FromRoute] int id)
+        public async Task<ActionResult<HotelResponse>> GetHotel([FromRoute] int id)
         {
             var hotel = await _hotelService.GetHotel(id);
             if (hotel == null)
@@ -36,7 +36,7 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels([FromQuery] PaginationFilter filter)
+        public async Task<ActionResult<IEnumerable<HotelResponse>>> GetHotels([FromQuery] PaginationFilter filter)
         {
             var validPageFilter = new PaginationFilter(filter.PerPage, filter.CurrentPage);
             var hotelData = await _hotelService.GetHotels();
@@ -45,7 +45,7 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Hotel>>> SearchFilterAndSortHotels([FromQuery] SearchBookingModel bookModel)
+        public async Task<ActionResult<IEnumerable<HotelResponse>>> SearchFilterAndSortHotels([FromQuery] SearchBookingModel bookModel)
         {
             var hotelData = await _hotelService.SearchFilterAndSortHotels(bookModel);
 
@@ -57,7 +57,7 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet("last-three")]
-        public async Task<ActionResult<Hotel>> GetLastThreeLocations()
+        public async Task<ActionResult<HotelResponse>> GetLastThreeLocations()
         {
             try
             {
