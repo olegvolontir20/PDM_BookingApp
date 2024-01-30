@@ -50,7 +50,7 @@ namespace BookingApp.Domain.Services
                 var hotels = await _repository.SearchFilterAndSortHotels(bookModel);
                 foreach (var hotel in hotels)
                 {
-                    List<Room> rooms = hotel.Rooms;
+                    ICollection<Room> rooms = hotel.Rooms;
                     List<Room> availableRooms = new();
 
                     foreach (var room in rooms)

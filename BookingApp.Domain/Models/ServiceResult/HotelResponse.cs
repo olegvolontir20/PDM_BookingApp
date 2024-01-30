@@ -15,7 +15,7 @@ namespace BookingApp.Domain.Models.ServiceResult
         public string? Country { get; set; }
         public string? Phone { get; set; }
         public string? Description { get; set; }
-        //public List<Room>? Rooms { get; set; }
+        public ICollection<RoomResponse>? Rooms { get; set; }
         //public List<RoomBooking>? RoomBookings { get; set; }
         public string? PathImage { get; set; }
 

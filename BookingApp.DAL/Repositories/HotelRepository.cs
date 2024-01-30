@@ -27,7 +27,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<IEnumerable<Hotel>> GetHotels() 
         {
             var hotelData = await _context.Hotels
-                .Include(x => x.Reviews)
+                .Include(x => x.Rooms)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<Hotel>>(hotelData);
@@ -37,7 +37,6 @@ namespace BookingApp.DAL.Repositories
         {
             var hotels = await _context.Hotels
                             .Include(h => h.Rooms)
-                            .Include(h => h.RoomBookings)
                             .Where(h => h.Country == bookModel.Country && h.City == bookModel.City)
                             .Where(h => h.Rooms.Any(r => r.Capacity >= int.Parse(bookModel.Capacity)))
                             .ToListAsync();
@@ -65,8 +64,7 @@ namespace BookingApp.DAL.Repositories
         public async Task<Hotel> GetHotel(int id)
         {
             var hotelData = await _context.Hotels
-                .Include(x => x.Reviews)
-                .ThenInclude(x => x.User)
+                .Include(x => x.Rooms)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 

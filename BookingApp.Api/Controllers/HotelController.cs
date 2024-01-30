@@ -16,13 +16,13 @@ namespace BookingApp.Api.Controllers
     {
         private readonly IHotelService _hotelService;
         private readonly IMapper _mapper;
+        private readonly String roomRoute = "rooms";
 
         public HotelController(IHotelService hotelService, IMapper mapper)
         {
             _hotelService = hotelService;
             _mapper = mapper;
         }
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<HotelResponse>> GetHotel([FromRoute] int id)
@@ -112,6 +112,6 @@ namespace BookingApp.Api.Controllers
             }
 
             return NoContent();
-        }
+        }    
     }
 }

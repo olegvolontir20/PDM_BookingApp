@@ -24,6 +24,14 @@ namespace BookingApp.Api.MapProfiles
 
             CreateMap<AddRoomBookingModel, RoomBooking>();
 
+            CreateMap<AddRoomModel, Room>();
+
+            CreateMap<Room, RoomResponse>();
+
+            CreateMap<HotelReview, HotelReviewResponse>();
+
+            CreateMap<ApartmentReview, ApartmentReviewResponse>();
+
             //Database DTO
             CreateMap<ApartmentDTO, Apartment>();
             CreateMap<Apartment, ApartmentDTO>();

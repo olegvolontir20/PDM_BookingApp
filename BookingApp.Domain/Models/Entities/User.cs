@@ -9,9 +9,9 @@ namespace BookingApp.Domain.Models.Entities
         public string? UserName { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
-        public List<HotelReview>? HotelReviews { get; set; }
-        public List<ApartmentReview>? ApartmentReviews { get; set; }
-        public List<FavoriteHotel>? FavoriteHotels { get; set; }
-        public List<FavoriteApartment>? FavoriteApartments { get; set; }
+        public ICollection<HotelReview>? HotelReviews { get; set; }
+        public ICollection<ApartmentReview>? ApartmentReviews { get; set; }
+        public ICollection<FavoriteHotel>? FavoriteHotels { get; set; }
+        public ICollection<FavoriteApartment>? FavoriteApartments { get; set; }
     }
 }

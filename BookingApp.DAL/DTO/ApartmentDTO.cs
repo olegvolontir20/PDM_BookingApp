@@ -28,8 +28,8 @@ namespace BookingApp.DAL.DTO
         [Required]
         [StringLength(500)]
         public string? Description { get; set; }
-        public List<ApartmentBookingDTO>? ApartmentBookings { get; set; }
-        public List<ApartmentReviewDTO>? Reviews { get; set; }
+        public ICollection<ApartmentBookingDTO>? ApartmentBookings { get; set; }
+        public ICollection<ApartmentReviewDTO>? Reviews { get; set; }
         public string? PathImage { get; set; }
 
     }

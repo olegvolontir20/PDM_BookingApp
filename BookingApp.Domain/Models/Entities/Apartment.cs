@@ -14,8 +14,8 @@ namespace BookingApp.Domain.Models.Entities
         public int Capacity { get; set; }
         public int Price { get; set; }
         public string? Description { get; set; }
-        public List<ApartmentBooking>? ApartmentBookings { get; set; }
-        public List<ApartmentReview>? Reviews { get; set; }
+        public ICollection<ApartmentBooking>? ApartmentBookings { get; set; }
+        public ICollection<ApartmentReview>? Reviews { get; set; }
         public string? PathImage { get; set; }
 
     }

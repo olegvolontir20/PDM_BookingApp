@@ -17,11 +17,11 @@ namespace BookingApp.DAL.DTO
         public string? Country { get; set; }
         public string? Phone { get; set; }
         public string? Description { get; set; }
-        public List<RoomDTO>? Rooms { get; set; }
-        public List<RoomBookingDTO>? RoomBookings { get; set; }
+        public ICollection<RoomDTO>? Rooms { get; set; }
+        public ICollection<RoomBookingDTO>? RoomBookings { get; set; }
         public string? PathImage { get; set; }
 
-        public List<HotelReviewDTO>? Reviews { get; set; }
+        public ICollection<HotelReviewDTO>? Reviews { get; set; }
 
     }
 }

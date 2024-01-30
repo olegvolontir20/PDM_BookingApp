@@ -13,7 +13,7 @@ namespace BookingApp.Domain.Models.ApiRequests
         public string? Country { get; set; }
         public string? Phone { get; set; }
         public string? Description { get; set; }
-        //public List<Room>? Rooms { get; set; }
+        public List<AddRoomModel>? Rooms { get; set; }
         //public List<RoomBooking>? RoomBookings { get; set; }
         public string? PathImage { get; set; }
 

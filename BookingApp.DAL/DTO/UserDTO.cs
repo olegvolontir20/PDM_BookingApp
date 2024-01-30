@@ -11,11 +11,11 @@ namespace BookingApp.DAL.DTO
         //public string? Email { get; set; }
         //public string? PhoneNumber { get; set; }
 
-        public List<HotelReviewDTO>? HotelReviews { get; set; }
-        public List<ApartmentReviewDTO>? ApartmentReviews { get; set; }
+        public ICollection<HotelReviewDTO>? HotelReviews { get; set; }
+        public ICollection<ApartmentReviewDTO>? ApartmentReviews { get; set; }
 
-        public List<FavoriteHotelDTO>? FavoriteHotels { get; set; }
-        public List<FavoriteApartmentDTO>? FavoriteApartments { get; set; }
+        public ICollection<FavoriteHotelDTO>? FavoriteHotels { get; set; }
+        public ICollection<FavoriteApartmentDTO>? FavoriteApartments { get; set; }
 
     }
 }
