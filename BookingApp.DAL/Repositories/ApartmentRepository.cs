@@ -32,38 +32,32 @@ namespace BookingApp.DAL.Repositories
             return _mapper.Map<Apartment>(apartmentData);
         }
 
-        public async Task<IEnumerable<Apartment>> GetApartments()
+        public async Task<ICollection<Apartment>> GetApartments()
         {
             var apartmentData = await _context.Apartments
                 .Include(x => x.Reviews)
                 .ToListAsync();
-            return _mapper.Map<IEnumerable<Apartment>>(apartmentData);
+            return _mapper.Map<ICollection<Apartment>>(apartmentData);
         }
 
-        public async Task<IEnumerable<Apartment>> SearchFilterAndSortApartments(SearchBookingModel bookModel)
+        public async Task<ICollection<Apartment>> SearchFilterAndSortApartments(SearchBookingModel bookModel)
         {
             var apartmentData = await _context.Apartments
                         .Include(a => a.ApartmentBookings)
                         .Where(a => a.Country == bookModel.Country && a.City == bookModel.City)
                         .Where(a => a.Capacity >= int.Parse(bookModel.Capacity))
                         .ToListAsync();
-            return _mapper.Map<IEnumerable<Apartment>>(apartmentData);
+            return _mapper.Map<ICollection<Apartment>>(apartmentData);
         }
 
-        public async Task<IEnumerable<ApartmentBooking>> GetApartmentBookings()
-        {
-            var apartmentData = await _context.ApartmentBookings.ToListAsync();
-            return _mapper.Map<IEnumerable<ApartmentBooking>>(apartmentData);
-        }
-
-        public async Task<IEnumerable<Apartment>> GetLastThreeLocations()
+        public async Task<ICollection<Apartment>> GetLastThreeLocations()
         {
                 var lastThreeApartments = await _context.Apartments
                     .OrderByDescending(a => a.Id)
                     .Take(3)
                     .ToListAsync();
 
-                return _mapper.Map<IEnumerable<Apartment>>(lastThreeApartments);
+                return _mapper.Map<ICollection<Apartment>>(lastThreeApartments);
         }
 
         public async Task PutApartment(Apartment apartment)

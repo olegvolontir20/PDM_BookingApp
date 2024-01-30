@@ -36,16 +36,16 @@ namespace BookingApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HotelResponse>>> GetHotels([FromQuery] PaginationFilter filter)
+        public async Task<ActionResult<ICollection<HotelResponse>>> GetHotels([FromQuery] PaginationFilter filter)
         {
             var validPageFilter = new PaginationFilter(filter.PerPage, filter.CurrentPage);
             var hotelData = await _hotelService.GetHotels();
 
-            return Ok(new PaginatedResponse<IEnumerable<HotelResponse>>(hotelData.Count(), validPageFilter.PerPage, validPageFilter.CurrentPage, hotelData));
+            return Ok(new PaginatedResponse<ICollection<HotelResponse>>(hotelData.Count(), validPageFilter.PerPage, validPageFilter.CurrentPage, hotelData));
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<HotelResponse>>> SearchFilterAndSortHotels([FromQuery] SearchBookingModel bookModel)
+        public async Task<ActionResult<ICollection<HotelResponse>>> SearchFilterAndSortHotels([FromQuery] SearchBookingModel bookModel)
         {
             var hotelData = await _hotelService.SearchFilterAndSortHotels(bookModel);
 

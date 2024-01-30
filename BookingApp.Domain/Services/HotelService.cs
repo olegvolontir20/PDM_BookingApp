@@ -14,11 +14,13 @@ namespace BookingApp.Domain.Services
     public class HotelService : IHotelService
     {
         private readonly IHotelRepository _repository;
+        private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
 
-        public HotelService(IHotelRepository repository, IMapper mapper)
+        public HotelService(IHotelRepository repository, IBookingRepository bookingRepository, IMapper mapper)
         {
             _repository = repository;
+            _bookingRepository = bookingRepository;
             _mapper = mapper;
         }
 
@@ -29,25 +31,26 @@ namespace BookingApp.Domain.Services
             return _mapper.Map<Hotel, HotelResponse>(hotelData);
         }
 
-        public async Task<IEnumerable<HotelResponse>> GetHotels()
+        public async Task<ICollection<HotelResponse>> GetHotels()
         {
             var hotelData = await _repository.GetHotels();
 
-            return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelResponse>>(hotelData);
+            return _mapper.Map<ICollection<Hotel>, ICollection<HotelResponse>>(hotelData);
         }
 
-        public async Task<IEnumerable<HotelResponse>> GetLastThreeLocations()
+        public async Task<ICollection<HotelResponse>> GetLastThreeLocations()
         {
             var lastThreeHotels = await _repository.GetLastThreeLocations();
 
-            return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelResponse>>(lastThreeHotels);
+            return _mapper.Map<ICollection<Hotel>, ICollection<HotelResponse>>(lastThreeHotels);
         }
 
-        public async Task<IEnumerable<HotelResponse>> SearchFilterAndSortHotels(SearchBookingModel bookModel)
+        public async Task<ICollection<HotelResponse>> SearchFilterAndSortHotels(SearchBookingModel bookModel)
         {
             try
             {
                 var hotels = await _repository.SearchFilterAndSortHotels(bookModel);
+
                 foreach (var hotel in hotels)
                 {
                     ICollection<Room> rooms = hotel.Rooms;
@@ -55,17 +58,14 @@ namespace BookingApp.Domain.Services
 
                     foreach (var room in rooms)
                     {
-                        var roomBookings = await _repository.GetRoomBookings();
+                        var roomBookings = await _bookingRepository.GetRoomBookings(room.Id);
                         bool isBooked = false;
                         foreach (var roomBooking in roomBookings)
                         {
-                            if (roomBooking.Room_Id == room.Id)
+                            if (bookModel.StartDate <= roomBooking.LastDay.Date && bookModel.EndDate >= roomBooking.FirstDay.Date)
                             {
-                                if (bookModel.StartDate <= roomBooking.LastDay.Date && bookModel.EndDate >= roomBooking.FirstDay.Date)
-                                {
-                                    isBooked = true;
-                                    break;
-                                }
+                                isBooked = true;
+                                break;
                             }
                         }
                         if (!isBooked)
@@ -79,7 +79,7 @@ namespace BookingApp.Domain.Services
                 hotels = hotels.Where(h => h.Rooms.Count() > 0).ToList();
                 hotels = hotels.OrderBy(h => h.Name).ToList();//sortare dupa nume hotel crescator
 
-                return _mapper.Map<IEnumerable<Hotel>, IEnumerable<HotelResponse>>(hotels);
+                return _mapper.Map<ICollection<Hotel>, ICollection<HotelResponse>>(hotels);
             }
             catch (Exception ex)
             {

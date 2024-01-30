@@ -11,13 +11,15 @@ namespace BookingApp.Domain.Interfaces
 {
     public interface IHotelRepository
     {
-        Task<IEnumerable<Hotel>> GetHotels();
+        Task<ICollection<Hotel>> GetHotels();
 
-        Task<IEnumerable<Hotel>> SearchFilterAndSortHotels(SearchBookingModel bookModel);
+        Task<ICollection<Room>> GetRooms(int hotelId);
 
-        Task<IEnumerable<Hotel>> GetLastThreeLocations();
+        Task<Room> GetRoom(int roomId);
 
-        Task<IEnumerable<RoomBooking>> GetRoomBookings();
+        Task<ICollection<Hotel>> SearchFilterAndSortHotels(SearchBookingModel bookModel);
+
+        Task<ICollection<Hotel>> GetLastThreeLocations();
 
         Task<Hotel> GetHotel(int id);
 

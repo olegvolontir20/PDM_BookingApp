@@ -12,6 +12,22 @@ namespace BookingApp.Domain.Interfaces
     {
         Task<ApartmentBooking> PostApartmentBooking(ApartmentBooking booking);
 
+        Task<ICollection<ApartmentBooking>> GetApartmentBookings(int apartmentId);
+
+        Task<ApartmentBooking> GetApartmentBooking(int bookingId);
+
+        Task<ICollection<ApartmentBooking>> GetUserApartmentBookings(int userId);
+
+        Task<ICollection<RoomBooking>> GetRoomBookings(int roomId);
+
+        Task<RoomBooking> GetRoomBooking(int bookingId);
+
+        Task<ICollection<RoomBooking>> GetUserRoomBookings(int userId);
+
         Task<RoomBooking> PostRoomBooking(RoomBooking booking);
+
+        Task DeleteRoomBooking(int id);
+
+        Task DeleteApartmentBooking(int id);
     }
 }

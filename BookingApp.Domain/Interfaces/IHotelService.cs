@@ -12,11 +12,11 @@ namespace BookingApp.Domain.Interfaces
 {
     public interface IHotelService
     {
-        Task<IEnumerable<HotelResponse>> GetHotels();
+        Task<ICollection<HotelResponse>> GetHotels();
 
-        Task<IEnumerable<HotelResponse>> SearchFilterAndSortHotels(SearchBookingModel bookModel);
+        Task<ICollection<HotelResponse>> SearchFilterAndSortHotels(SearchBookingModel bookModel);
 
-        Task<IEnumerable<HotelResponse>> GetLastThreeLocations();
+        Task<ICollection<HotelResponse>> GetLastThreeLocations();
 
         Task<HotelResponse> GetHotel(int id);
 

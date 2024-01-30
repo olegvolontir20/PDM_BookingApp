@@ -14,11 +14,13 @@ namespace BookingApp.Domain.Services
     public class ApartmentService : IApartmentService
     {
         private readonly IApartmentRepository _repository;
+        private readonly IBookingRepository _bookingRepository;
         private readonly IMapper _mapper;
 
-        public ApartmentService(IApartmentRepository repository, IMapper mapper)
+        public ApartmentService(IApartmentRepository repository, IBookingRepository bookingRepository, IMapper mapper)
         {
             _repository = repository;
+            _bookingRepository = bookingRepository;
             _mapper = mapper;
         }
 
@@ -29,14 +31,14 @@ namespace BookingApp.Domain.Services
             return _mapper.Map<Apartment,ApartmentResponse>(apartmentData);
         }
 
-        public async Task<IEnumerable<ApartmentResponse>> GetApartments()
+        public async Task<ICollection<ApartmentResponse>> GetApartments()
         {
             var apartmentData = await _repository.GetApartments();
 
-            return _mapper.Map< IEnumerable<Apartment>, IEnumerable<ApartmentResponse>>(apartmentData);
+            return _mapper.Map<ICollection<Apartment>, ICollection<ApartmentResponse>>(apartmentData);
         }
 
-        public async Task<IEnumerable<ApartmentResponse>> SearchFilterAndSortApartments(SearchBookingModel bookModel)
+        public async Task<ICollection<ApartmentResponse>> SearchFilterAndSortApartments(SearchBookingModel bookModel)
         {
             try
             {
@@ -45,18 +47,16 @@ namespace BookingApp.Domain.Services
 
                 foreach (var apartment in apartmentData)
                 {
-                    var apartmentBookings = await _repository.GetApartmentBookings();
+                    var apartmentBookings = await _bookingRepository.GetApartmentBookings(apartment.Id);
                     bool isBooked = false;
 
                     foreach (var apartmentBooking in apartmentBookings)
                     {
-                        if (apartmentBooking.Id == apartment.Id)
+
+                        if (bookModel.StartDate <= apartmentBooking.LastDay.Date && bookModel.EndDate >= apartmentBooking.FirstDay.Date)
                         {
-                            if (bookModel.StartDate <= apartmentBooking.LastDay.Date && bookModel.EndDate >= apartmentBooking.FirstDay.Date)
-                            {
-                                isBooked = true;
-                                break;
-                            }
+                            isBooked = true;
+                            break;
                         }
                     }
 
@@ -69,7 +69,7 @@ namespace BookingApp.Domain.Services
                 availableApartments = availableApartments.OrderBy(a => a.Name).ToList();
 
                 // Assuming ApartmentList has a property named Apartments
-                var result = _mapper.Map<List<Apartment>, IEnumerable<ApartmentResponse>>(availableApartments);
+                var result = _mapper.Map<List<Apartment>, ICollection<ApartmentResponse>>(availableApartments);
 
                 return result;
             }
@@ -80,11 +80,11 @@ namespace BookingApp.Domain.Services
             }
         }
 
-        public async Task<IEnumerable<ApartmentResponse>> GetLastThreeLocations()
+        public async Task<ICollection<ApartmentResponse>> GetLastThreeLocations()
         {
             var lastThreeApartaments = await _repository.GetLastThreeLocations();
 
-            return _mapper.Map<IEnumerable<Apartment>, IEnumerable<ApartmentResponse>>(lastThreeApartaments);
+            return _mapper.Map<ICollection<Apartment>, ICollection<ApartmentResponse>>(lastThreeApartaments);
         }
 
         public async Task PutApartment(int id, Apartment apartament)

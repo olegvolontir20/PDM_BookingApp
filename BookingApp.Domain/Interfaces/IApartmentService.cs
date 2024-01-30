@@ -11,13 +11,13 @@ namespace BookingApp.Domain.Interfaces
 {
     public interface IApartmentService
     {
-        Task<IEnumerable<ApartmentResponse>> GetApartments();
+        Task<ICollection<ApartmentResponse>> GetApartments();
 
         Task<ApartmentResponse> GetApartment(int id);
 
-        Task<IEnumerable<ApartmentResponse>> SearchFilterAndSortApartments(SearchBookingModel bookModel);
+        Task<ICollection<ApartmentResponse>> SearchFilterAndSortApartments(SearchBookingModel bookModel);
 
-        Task<IEnumerable<ApartmentResponse>> GetLastThreeLocations();
+        Task<ICollection<ApartmentResponse>> GetLastThreeLocations();
 
         Task PutApartment(int id, Apartment apartment);
 

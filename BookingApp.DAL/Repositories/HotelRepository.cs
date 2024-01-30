@@ -24,16 +24,16 @@ namespace BookingApp.DAL.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Hotel>> GetHotels() 
+        public async Task<ICollection<Hotel>> GetHotels() 
         {
             var hotelData = await _context.Hotels
                 .Include(x => x.Rooms)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<Hotel>>(hotelData);
+            return _mapper.Map<ICollection<Hotel>>(hotelData);
         }
 
-        public async Task<IEnumerable<Hotel>> SearchFilterAndSortHotels(SearchBookingModel bookModel)
+        public async Task<ICollection<Hotel>> SearchFilterAndSortHotels(SearchBookingModel bookModel)
         {
             var hotels = await _context.Hotels
                             .Include(h => h.Rooms)
@@ -41,24 +41,17 @@ namespace BookingApp.DAL.Repositories
                             .Where(h => h.Rooms.Any(r => r.Capacity >= int.Parse(bookModel.Capacity)))
                             .ToListAsync();
 
-            return _mapper.Map<IEnumerable<Hotel>>(hotels);
+            return _mapper.Map<ICollection<Hotel>>(hotels);
         }
 
-        public async Task<IEnumerable<RoomBooking>> GetRoomBookings()
-        {
-            var bookings = await _context.RoomBookings.ToListAsync();
-
-            return _mapper.Map<IEnumerable<RoomBooking>>(bookings);
-        }
-
-        public async Task<IEnumerable<Hotel>> GetLastThreeLocations()
+        public async Task<ICollection<Hotel>> GetLastThreeLocations()
         {
             var lastThreeHotels = await _context.Hotels
                 .OrderByDescending(h => h.Id)
                 .Take(3)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<Hotel>>(lastThreeHotels);
+            return _mapper.Map<ICollection<Hotel>>(lastThreeHotels);
         }
 
         public async Task<Hotel> GetHotel(int id)
@@ -97,6 +90,24 @@ namespace BookingApp.DAL.Repositories
 
             _context.Hotels.Remove(hotel);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<Room>> GetRooms(int hotelId)
+        {
+            var roomData = await _context.Rooms
+                .Where(x => x.Hotel_Id == hotelId)
+                .ToListAsync();
+
+            return _mapper.Map<ICollection<Room>>(roomData);
+        }
+
+        public async Task<Room> GetRoom(int roomId)
+        {
+            var roomData = await _context.Rooms
+                .Where(x => x.Id == roomId)
+                .FirstOrDefaultAsync();
+
+            return _mapper.Map<Room>(roomData);
         }
     }
 }
